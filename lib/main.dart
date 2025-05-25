@@ -61,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const CalculatorScreen(),
     const BMIScreen(),
     const SettingsScreen(),
+    const AboutScreen(),
   ];
 
   @override
@@ -99,6 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.settings_outlined),
             selectedIcon: Icon(Icons.settings),
             label: 'Settings',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.info_outline),
+            selectedIcon: Icon(Icons.info),
+            label: 'About',
           ),
         ],
       ),
