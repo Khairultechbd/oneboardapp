@@ -17,6 +17,8 @@ class CustomInputField extends StatelessWidget {
   final bool enabled;
   final void Function(String)? onChanged;
   final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final void Function(String)? onSubmitted;
 
   const CustomInputField({
     super.key,
@@ -34,6 +36,8 @@ class CustomInputField extends StatelessWidget {
     this.enabled = true,
     this.onChanged,
     this.focusNode,
+    this.textInputAction,
+    this.onSubmitted,
   });
 
   @override
@@ -59,6 +63,8 @@ class CustomInputField extends StatelessWidget {
           enabled: enabled,
           onChanged: onChanged,
           focusNode: focusNode,
+          textInputAction: textInputAction,
+          onFieldSubmitted: onSubmitted,
           style: theme.textTheme.bodyLarge,
           decoration: InputDecoration(
             hintText: hint,
@@ -73,7 +79,7 @@ class CustomInputField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
               borderSide: BorderSide(
-                color: theme.colorScheme.outline.withOpacity(0.5),
+                color: theme.colorScheme.outline.withAlpha(51),
               ),
             ),
             focusedBorder: OutlineInputBorder(

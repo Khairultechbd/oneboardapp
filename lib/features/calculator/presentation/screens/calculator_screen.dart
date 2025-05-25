@@ -28,7 +28,22 @@ class CalculatorScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          _buildDisplay(context, state),
+          CustomCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  state.previousInput.isEmpty ? '0' : state.previousInput,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(height: AppConstants.smallPadding),
+                Text(
+                  state.currentInput,
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: _buildKeypad(context, notifier),
           ),
@@ -37,64 +52,38 @@ class CalculatorScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDisplay(BuildContext context, CalculatorState state) {
-    return Container(
-      padding: const EdgeInsets.all(AppConstants.defaultPadding),
-      color: Theme.of(context).colorScheme.surface,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            state.input.isEmpty ? '0' : state.input,
-            style: Theme.of(context).textTheme.headlineMedium,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: AppConstants.smallPadding),
-          Text(
-            state.output.isEmpty ? '0' : state.output,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: state.isError ? Theme.of(context).colorScheme.error : null,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildKeypad(BuildContext context, CalculatorNotifier notifier) {
+  Widget _buildKeypad(BuildContext context, CalculatorProvider notifier) {
     return GridView.count(
       padding: const EdgeInsets.all(AppConstants.defaultPadding),
       crossAxisCount: 4,
       mainAxisSpacing: AppConstants.smallPadding,
       crossAxisSpacing: AppConstants.smallPadding,
       children: [
-        _buildButton(context, 'C', () => notifier.clearInput(), isOperator: true),
-        _buildButton(context, '⌫', () => notifier.deleteLastChar(), isOperator: true),
-        _buildButton(context, '%', () => notifier.appendInput('%'), isOperator: true),
-        _buildButton(context, '÷', () => notifier.appendInput('/'), isOperator: true),
-        _buildButton(context, '7', () => notifier.appendInput('7')),
-        _buildButton(context, '8', () => notifier.appendInput('8')),
-        _buildButton(context, '9', () => notifier.appendInput('9')),
-        _buildButton(context, '×', () => notifier.appendInput('*'), isOperator: true),
-        _buildButton(context, '4', () => notifier.appendInput('4')),
-        _buildButton(context, '5', () => notifier.appendInput('5')),
-        _buildButton(context, '6', () => notifier.appendInput('6')),
-        _buildButton(context, '-', () => notifier.appendInput('-'), isOperator: true),
-        _buildButton(context, '1', () => notifier.appendInput('1')),
-        _buildButton(context, '2', () => notifier.appendInput('2')),
-        _buildButton(context, '3', () => notifier.appendInput('3')),
-        _buildButton(context, '+', () => notifier.appendInput('+'), isOperator: true),
-        _buildButton(context, '0', () => notifier.appendInput('0')),
-        _buildButton(context, '.', () => notifier.appendInput('.')),
-        _buildButton(context, '(', () => notifier.appendInput('(')),
-        _buildButton(context, ')', () => notifier.appendInput(')')),
-        _buildButton(context, 'sin', () => notifier.appendInput('sin('), isOperator: true),
-        _buildButton(context, 'cos', () => notifier.appendInput('cos('), isOperator: true),
-        _buildButton(context, 'tan', () => notifier.appendInput('tan('), isOperator: true),
-        _buildButton(context, '=', () => notifier.calculate(), isOperator: true),
+        _buildButton(context, 'C', () => notifier.clear()),
+        _buildButton(context, '⌫', () => notifier.delete()),
+        _buildButton(context, '%', () => notifier.appendOperator('%')),
+        _buildButton(context, '÷', () => notifier.appendOperator('/')),
+        _buildButton(context, '7', () => notifier.appendNumber('7')),
+        _buildButton(context, '8', () => notifier.appendNumber('8')),
+        _buildButton(context, '9', () => notifier.appendNumber('9')),
+        _buildButton(context, '×', () => notifier.appendOperator('*')),
+        _buildButton(context, '4', () => notifier.appendNumber('4')),
+        _buildButton(context, '5', () => notifier.appendNumber('5')),
+        _buildButton(context, '6', () => notifier.appendNumber('6')),
+        _buildButton(context, '-', () => notifier.appendOperator('-')),
+        _buildButton(context, '1', () => notifier.appendNumber('1')),
+        _buildButton(context, '2', () => notifier.appendNumber('2')),
+        _buildButton(context, '3', () => notifier.appendNumber('3')),
+        _buildButton(context, '+', () => notifier.appendOperator('+')),
+        _buildButton(context, '±', () => notifier.appendOperator('-')),
+        _buildButton(context, '0', () => notifier.appendNumber('0')),
+        _buildButton(context, '.', () => notifier.appendNumber('.')),
+        _buildButton(
+          context,
+          '=',
+          () => notifier.calculate(),
+          isPrimary: true,
+        ),
       ],
     );
   }
@@ -103,13 +92,13 @@ class CalculatorScreen extends ConsumerWidget {
     BuildContext context,
     String text,
     VoidCallback onPressed, {
-    bool isOperator = false,
+    bool isPrimary = false,
   }) {
     return CustomButton(
       text: text,
       onPressed: onPressed,
-      backgroundColor: isOperator ? Theme.of(context).colorScheme.primary : null,
-      textColor: isOperator ? Theme.of(context).colorScheme.onPrimary : null,
+      backgroundColor: isPrimary ? Theme.of(context).colorScheme.primary : null,
+      textColor: isPrimary ? Theme.of(context).colorScheme.onPrimary : null,
     );
   }
 
