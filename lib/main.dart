@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:super_app/core/theme/app_theme.dart';
+import 'package:super_app/core/constants/app_constants.dart';
 import 'package:super_app/features/notelab/presentation/screens/notelab_screen.dart';
 import 'package:super_app/features/calculator/presentation/screens/calculator_screen.dart';
 import 'package:super_app/features/bmi/presentation/screens/bmi_screen.dart';
 import 'package:super_app/features/settings/presentation/screens/settings_screen.dart';
 import 'package:super_app/features/about/presentation/screens/about_screen.dart';
+import 'package:super_app/features/settings/presentation/providers/settings_provider.dart';
 
 void main() {
   runApp(
@@ -15,16 +17,29 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
+
     return MaterialApp(
       title: 'SuperApp',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: settings.themeMode,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            textTheme: Theme.of(context).textTheme.apply(
+              fontSizeFactor: settings.fontSize / AppConstants.mediumFontSize,
+              fontFamily: settings.fontFamily,
+            ),
+          ),
+          child: child!,
+        );
+      },
       home: const HomeScreen(),
     );
   }
