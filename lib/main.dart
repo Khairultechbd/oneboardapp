@@ -16,10 +16,10 @@ void main() {
     ),
   );
 }
-//checkgit
+
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
-
+//check
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
